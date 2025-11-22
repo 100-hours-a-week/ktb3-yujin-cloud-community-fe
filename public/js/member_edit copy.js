@@ -162,6 +162,38 @@ document.addEventListener("DOMContentLoaded", async () => {
       console.log("FormData:", key, value);
     }
 
+    // 이미지 변경이 있다면 람다 호출
+    if (file && !resetToDefault) {
+      const lambdaUrl =
+        "https://iuw2899b94.execute-api.ap-northeast-2.amazonaws.com/upload/profile-image";
+
+      const lambdaFormData = new FormData();
+      lambdaFormData.append("profileImage", file);
+
+      try {
+        const lambdaRes = await fetch(lambdaUrl, {
+          method: "POST",
+          body: lambdaFormData,
+        });
+
+        const lambdaData = await lambdaRes.json();
+        console.log("Lambda Upload Result:", lambdaData);
+
+        if (lambdaData?.data?.filePath) {
+          profileImageUrl = lambdaData.data.filePath; // S3 URL
+        } else {
+          alert("이미지 업로드 실패");
+          return;
+        }
+      } catch (err) {
+        console.error("Lambda Upload Error:", err);
+        alert("이미지 업로드 중 오류가 발생했습니다.");
+        return;
+      }
+    }
+
+    // 백엔드 API 호출 & 람다에서 백엔드에 저장할 값 가져오는 쪽 수정
+
     // 프로필 이미지 업로드
     // const file = profileFileInput.files[0];
     // if (resetToDefault) {

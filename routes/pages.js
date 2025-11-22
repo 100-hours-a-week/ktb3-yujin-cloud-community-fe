@@ -42,7 +42,6 @@ async function renderPage(req, options = {}) {
         content += compHtml + "\n";
       }
     }
-    // console.log("랜더페이지 내부 컨텐트" + content);
 
     // CSS / JS 포함
     let extraCSS = "";
@@ -65,12 +64,13 @@ async function renderPage(req, options = {}) {
 
     // 템플릿 조립
     const html = layout
-      .replace("{{title}}", options.title || "아무 말 대잔치")
+      .replace("{{title}}", options.title || "커뮤니티")
       .replace("{{extraCSS}}", extraCSS)
       .replace("{{extraJS}}", `${loginScript}\n${extraJS}`)
       .replace("{{header}}", header)
       .replace("{{footer}}", footer)
-      .replace("{{content}}", content);
+      .replace("{{content}}", content)
+      .replace("{{API_BASE_URL}}", process.env.BACKEND_URL);
 
     return html;
   } catch (err) {
