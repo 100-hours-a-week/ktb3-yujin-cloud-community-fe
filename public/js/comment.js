@@ -98,7 +98,7 @@ export async function loadComments(postId, { append = false } = {}) {
 function renderComments(comments, commentList) {
   if (!comments || comments.length === 0) {
     if (commentList.children.length === 0) {
-      commentList.innerHTML = `<li class="empty">댓글이 존재하지 않습니다.</li>`;
+      commentList.innerHTML = `<li class="empty-comment"><p>🧺 아직 댓글이 없어요. 첫 번째 댓글을 남겨주세요!</p></li>`;
     }
     return;
   }
@@ -423,6 +423,7 @@ async function updateComment(postId, commentId) {
 async function refreshCommentsFromStart(postId) {
   commentPage = 0;
   commentEnd = false;
+  commentKeydownAdded = true;
   const list = document.getElementById("commentList");
   const box = document.getElementById("commentLoadBox");
   if (box) {
